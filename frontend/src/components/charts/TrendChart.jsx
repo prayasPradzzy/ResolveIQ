@@ -1,0 +1,1 @@
+// Trend chart component placeholder.
