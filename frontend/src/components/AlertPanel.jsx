@@ -1,33 +1,49 @@
 function AlertPanel({ alerts, loading, error }) {
+  if (!loading && !error && alerts.length === 0) {
+    return null; // hide if no alerts
+  }
+
   return (
-    <section className="rounded-xl border border-red-200 bg-red-50 p-4 fade-in">
-      <h3 className="inline-flex items-center gap-2 text-sm font-semibold text-red-800">
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M12 8v5m0 3h.01" strokeLinecap="round" />
-          <path d="M10.3 3.8 1.9 18a2 2 0 0 0 1.7 3h16.8a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        Alerts
-      </h3>
+    <section className="rounded-2xl border border-rose-200 bg-rose-50/50 p-5 fade-in shadow-sm">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="inline-flex items-center gap-2 text-base font-bold text-rose-800">
+          <span className="p-1.5 bg-rose-100 rounded-lg text-rose-600">
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+          Action Required ({alerts.length})
+        </h3>
+      </div>
 
       {loading ? (
-        <div className="mt-3 space-y-2">
-          <div className="skeleton h-16 rounded-lg" />
-          <div className="skeleton h-16 rounded-lg" />
+        <div className="mt-4 space-y-3">
+          <div className="skeleton h-20 rounded-xl bg-rose-100" />
+          <div className="skeleton h-20 rounded-xl bg-rose-100" />
         </div>
       ) : null}
-      {error ? <p className="mt-2 text-sm text-red-700">{error}</p> : null}
-
-      {!loading && !error && alerts.length === 0 ? (
-        <p className="mt-2 text-sm text-red-700">No active alerts.</p>
+      
+      {error ? (
+        <div className="mt-3 p-3 bg-white rounded-xl border border-red-100 text-sm text-red-600 font-medium flex items-center gap-2">
+          <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          {error}
+        </div>
       ) : null}
 
-      <div className="mt-3 space-y-2">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {alerts.map((alert) => (
-          <article key={alert.id} className="panel-transition rounded-lg border border-red-200 bg-white p-3 hover:shadow-sm">
-            <p className="text-sm font-medium text-red-800">{alert.summary || 'Complaint alert'}</p>
-            <p className="mt-1 text-xs text-red-700">Reason: {alert.alert_reason}</p>
-            <p className="mt-1 text-xs text-red-600">
-              Severity: {alert.severity} | Sentiment: {alert.sentiment} | Priority: {alert.priority_score}
+          <article key={alert.id} className="panel-transition relative rounded-xl border border-rose-200/60 bg-white p-4 hover:-translate-y-1 hover:shadow-md hover:shadow-rose-100/50 group cursor-pointer">
+            <div className="absolute top-0 left-0 w-1 h-full bg-rose-500 rounded-l-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="flex justify-between items-start gap-2 mb-2">
+               <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-rose-100 text-rose-700 text-xs font-bold uppercase tracking-wider">
+                 {alert.severity}
+               </span>
+               <span className="text-xs font-medium text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md">Score: {alert.priority_score}</span>
+            </div>
+            <p className="text-sm font-semibold text-slate-800 line-clamp-2 leading-snug">{alert.summary || 'Complaint alert'}</p>
+            <p className="mt-2 text-xs text-slate-500 font-medium flex items-center gap-1.5">
+               <svg className="w-3.5 h-3.5 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+               {alert.alert_reason}
             </p>
           </article>
         ))}

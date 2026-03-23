@@ -51,39 +51,65 @@ function Submit() {
   }
 
   return (
-    <section className="space-y-6 fade-in">
-      <header>
-        <div className="inline-flex items-center gap-2 text-slate-700">
-          <PageIcon />
-          <h2 className="text-3xl font-semibold text-slate-900">Submit Complaint</h2>
+    <section className="space-y-8 fade-in">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/50 backdrop-blur pb-4 border-b border-slate-200/50">
+        <div>
+          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-1 font-medium">
+            <span className="hover:text-slate-800 cursor-pointer transition-colors">Home</span>
+            <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span className="text-teal-600">Submit Complaint</span>
+          </nav>
+          <div className="inline-flex items-center gap-3 text-slate-700">
+            <div className="p-2 bg-teal-100 text-teal-700 rounded-lg">
+              <PageIcon />
+            </div>
+            <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-slate-900">Submit Complaint</h2>
+          </div>
+          <p className="mt-2 text-sm text-slate-600 font-medium max-w-xl">Paste customer complaint text to run AI analysis, extract sentiment & categorize automatically.</p>
         </div>
-        <p className="mt-1.5 text-sm text-slate-600">Paste customer complaint text to run AI analysis.</p>
+        
+        <div className="flex items-center gap-3 self-start sm:self-auto hidden sm:flex">
+           <div className="h-8 w-8 bg-gradient-to-tr from-teal-500 to-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm ring-2 ring-white">
+             AU
+           </div>
+        </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-6">
-        <label htmlFor="complaint" className="mb-2 block text-sm font-medium text-slate-700">
-          Complaint Text
-        </label>
+      <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div className="flex justify-between items-end mb-2">
+          <label htmlFor="complaint" className="block text-sm font-semibold text-slate-700">
+            Complaint Text
+          </label>
+          <span className="text-xs text-slate-400 font-medium">{text.length} characters</span>
+        </div>
+        
         <textarea
           id="complaint"
           rows={8}
-          placeholder="Enter complaint details..."
+          placeholder="e.g. 'I received my order yesterday but the item was completely broken and the packaging was torn...'"
           value={text}
           onChange={(event) => setText(event.target.value)}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-900 outline-none panel-transition focus:border-slate-500"
+          className={`w-full rounded-lg border px-3 py-2.5 text-sm text-slate-900 outline-none panel-transition focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${error ? 'border-red-500' : 'border-slate-300'}`}
         />
 
-        {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
+        {error ? (
+          <div className="mt-3 flex items-center gap-1 text-sm text-red-600 font-medium bg-red-50 p-2 rounded-md">
+             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+             </svg>
+             {error}
+          </div>
+        ) : null}
 
         <button
           type="submit"
-          disabled={loading}
-          className="panel-transition mt-4 inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-500"
+          disabled={loading || !text.trim()}
+          className="panel-transition mt-4 inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-lg bg-teal-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-500/30 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 shadow-sm"
         >
           {loading ? (
             <>
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-              Processing...
+              Processing Analysis...
             </>
           ) : (
             'Analyze Complaint'

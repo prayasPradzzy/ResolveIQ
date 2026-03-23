@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 
 function SectionCard({ title, children }) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-4">
-      <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
-      <div className="mt-3 text-sm text-slate-700">{children}</div>
+    <section className="rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
+      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide border-b border-slate-100 pb-2 mb-3">{title}</h3>
+      <div className="text-sm text-slate-700 leading-relaxed">{children}</div>
     </section>
   )
 }
@@ -22,23 +22,27 @@ function ComplaintDetailPanel({ detail, loading, error }) {
 
   if (loading) {
     return (
-      <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-6 fade-in">
-        <div className="skeleton h-4 w-1/3 rounded" />
-        <div className="skeleton h-20 rounded-lg" />
-        <div className="skeleton h-16 rounded-lg" />
-        <div className="skeleton h-20 rounded-lg" />
+      <div className="space-y-4 rounded-2xl border border-slate-200/60 bg-white p-6 fade-in shadow-sm">
+        <div className="skeleton h-6 w-1/3 rounded mb-6" />
+        <div className="skeleton h-24 rounded-xl" />
+        <div className="skeleton h-20 rounded-xl" />
+        <div className="skeleton h-32 rounded-xl" />
       </div>
     )
   }
 
   if (error) {
-    return <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>
+    return <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm font-medium text-red-700">{error}</div>
   }
 
   if (!detail) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
-        Select a complaint row to view full details.
+      <div className="rounded-2xl border border-slate-200/60 bg-white p-10 text-center text-sm text-slate-500 shadow-sm flex flex-col items-center justify-center min-h-[400px]">
+        <svg className="w-16 h-16 text-slate-200 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <p className="font-semibold text-slate-600 text-lg">No Selection</p>
+        <p className="mt-1 text-slate-400">Select a complaint row to view full details.</p>
       </div>
     )
   }
@@ -92,20 +96,24 @@ function ComplaintDetailPanel({ detail, loading, error }) {
       </SectionCard>
 
       <SectionCard title="Generated Response">
-        <textarea
-          rows={6}
-          value={responseDraft}
-          onChange={(event) => setResponseDraft(event.target.value)}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500"
-        />
-
-        <button
-          type="button"
-          onClick={handleSend}
-          className="panel-transition mt-3 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
-        >
-          Send
-        </button>
+        <div className="relative">
+          <textarea
+            rows={6}
+            value={responseDraft}
+            onChange={(event) => setResponseDraft(event.target.value)}
+            className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all mb-1 resize-y min-h-[120px]"
+          />
+        </div>
+        <div className="flex justify-end mt-3">
+          <button
+            type="button"
+            onClick={handleSend}
+            className="panel-transition inline-flex items-center gap-2 rounded-xl bg-teal-600 px-6 py-2.5 text-sm font-bold text-white hover:bg-teal-700 hover:shadow-md hover:shadow-teal-600/20 focus:ring-4 focus:ring-teal-500/30 active:scale-95"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            Send Response
+          </button>
+        </div>
       </SectionCard>
     </div>
   )
