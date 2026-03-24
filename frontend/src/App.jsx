@@ -5,6 +5,7 @@ import Submit from './pages/Submit'
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard')
+  const [isDarkMode, setIsDarkMode] = useState(true)
 
   const pageContent = useMemo(() => {
     if (activeView === 'submit') {
@@ -15,15 +16,17 @@ function App() {
   }, [activeView])
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 font-sans">
-      <div className="mx-auto flex min-h-screen w-full max-w-[1400px] flex-col md:flex-row">
-        <Sidebar activeView={activeView} onChangeView={setActiveView} />
+    <div className={isDarkMode ? 'dark' : ''}>
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200">
+        <div className="mx-auto flex min-h-screen w-full max-w-[1400px] flex-col md:flex-row">
+          <Sidebar activeView={activeView} onChangeView={setActiveView} />
 
-        <section className="flex-1 px-4 py-8 md:px-10 md:py-10 pb-24 md:pb-10 fade-in w-full overflow-x-hidden">
-          {pageContent}
-        </section>
-      </div>
-    </main>
+          <section className="flex-1 px-4 py-8 md:px-10 md:py-10 pb-24 md:pb-10 fade-in w-full overflow-x-hidden">
+            {pageContent}
+          </section>
+        </div>
+      </main>
+    </div>
   )
 }
 
